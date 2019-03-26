@@ -6,8 +6,8 @@
 # Verify: cat /etc/resolv.conf
 # 
 # execute docker:
-# $ sudo docker run -p 8888:8888 -i -t ubuntu16.04/py3/caffe2:0.1 /bin/bash
-# (inside docker) $ jupyter notebook --ip=$docker_ip --port=8888 --allow-root
+# $ sudo docker run -v /home/saideep/Projects/:/mnt/Projects -p 8888:8888 -i -t ubuntu-16.04-py3.5-caffe2-cpu:0.1 /bin/bash
+# (inside docker) $ jupyter notebook --ip=172.17.0.2 --port=8888 --allow-root
 # 
 # Can get docker_ip using ifconfig command inside docker
 # Change mount below according to your directories
@@ -36,10 +36,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	python3-pip \
 	libgflags-dev \
 	python3-setuptools \
-	cmake 
-
-# for ip stuff
-RUN apt-get update && apt-get install -y --no-install-recommends net-tools
+	cmake \
+	vim \
+	net-tools
 
 # all python packages required
 RUN pip3 install --no-cache-dir \
@@ -60,20 +59,27 @@ RUN pip3 install --no-cache-dir \
     hypothesis \
 	numpy \
     typing \
-    hypothesis
+    hypothesis \
+    pandas \
+    wheel \
+    sklearn \
+    lmdb 
+
+# to use LMDB in your project
+ENV USE_LMDB ON
 
 # clone repo now
 RUN git clone https://github.com/pytorch/pytorch.git && \
 	cd pytorch && \
 	git submodule update --init --recursive && \
+	# speed up your execution
+	EXTRA_CAFFE2_CMAKE_FLAGS="-DUSE_NATIVE_ARCH=ON" \
+	# start install. Takes time
 	pip3 install .
 
 
 # check if install was success
 RUN cd ~ && python3 -c 'from caffe2.python import core' 2>/dev/null && echo "Success" || echo "Failure"
-
-# add the directory you want to mount from host to docker
-ADD /home/saideep/Projects/ /mnt/
 
 # create an area to work in
 WORKDIR /workspace
