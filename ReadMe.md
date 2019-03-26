@@ -1,9 +1,9 @@
 # Docker Images
 
 Install docker with:
-'''shell
+```shell
 sudo apt install docker.io
-'''
+```
 
 A collection of docker files that I use or have made.
 
