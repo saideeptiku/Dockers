@@ -38,7 +38,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	python3-setuptools \
 	cmake \
 	vim \
-	net-tools
+	net-tools \
+	wget
 
 # all python packages required
 RUN pip3 install --no-cache-dir \
