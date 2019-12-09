@@ -58,7 +58,7 @@ RUN pip3 install --no-cache-dir \
     six \
     protobuf \
     hypothesis \
-	numpy \
+    numpy \
     typing \
     hypothesis \
     pandas \
@@ -68,13 +68,13 @@ RUN pip3 install --no-cache-dir \
 
 # to use LMDB in your project
 ENV USE_LMDB ON
+# CPU acceleration
+ENV USE_NATIVE_ARCH ON
 
 # clone repo now
 RUN git clone https://github.com/pytorch/pytorch.git && \
 	cd pytorch && \
 	git submodule update --init --recursive && \
-	# speed up your execution
-	EXTRA_CAFFE2_CMAKE_FLAGS="-DUSE_NATIVE_ARCH=ON" \
 	# start install. Takes time
 	pip3 install .
 

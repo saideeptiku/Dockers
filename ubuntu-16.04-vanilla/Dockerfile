@@ -28,7 +28,7 @@ RUN useradd -m saideep && echo "saideep:saideep" | chpasswd && adduser saideep s
 WORKDIR /home/saideep/
 RUN chmod -R a+w /home/saideep
 
-USER docker
+USER saideep
 CMD /bin/bash
 
 
